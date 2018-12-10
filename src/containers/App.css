@@ -51,6 +51,12 @@ footer {
 }
 
 @media only screen and (max-width: 600px) {
+    .main-nav {
+      font-size: 0.5em;
+    }
+}
+
+@media  screen and (max-height: 300px)  {
   .main-nav {
     font-size: 0.5em;
   }

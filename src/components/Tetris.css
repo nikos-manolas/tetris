@@ -11,12 +11,28 @@ table {
 }
 
 tbody {
-	font-size: 3.5vh;
 	background: white;
 }
 
-@media only screen and (max-height: 650px) {
-	tbody {
-		font-size: 2.5vh;
+td {
+	width: 3vh;
+	height: 3vh;
+}
+
+@media only screen and (max-height: 500px) {
+	td {
+		width: 2vh;
+		height: 2vh;
 	}
+}
+
+@media only screen and (max-height: 280px) {
+	td {
+		width: 1vh;
+		height: 1vh;
+	}
+}
+
+.filled {
+	background: black;
 }
