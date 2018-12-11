@@ -1,10 +1,11 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Tetris.css';
 
-const Tetris = ({myBoard}) => {
+const Tetris = ({myBoard, startGame}) => {
 	return (
-		<div className = "container">
-			<table className = "grid">
+		<div className = "container relative">
+			<table>
 				<tbody>
 				{myBoard.map((row, rowIndex) => 
 					<tr key={rowIndex}>
@@ -13,6 +14,10 @@ const Tetris = ({myBoard}) => {
 				)}
 				</tbody>
 			</table>
+			<div className = "absolute pa3 mt2" style= {{border: '1px solid black', background: 'green', bottom:'40%', right:'10%'}}>
+				<button className="grow no-underline br-pill ba ph3 pv2 mb2 dib white" onClick={startGame} title='Click to play'><FontAwesomeIcon icon="play-circle"/></button>
+				<a className="grow no-underline br-pill ba ph3 pv2 mb2 dib white" href="#0" title='Click to pause'><FontAwesomeIcon icon="pause-circle"/></a>
+			</div>
 		</div>
 	);
 }
