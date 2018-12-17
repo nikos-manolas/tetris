@@ -10,29 +10,8 @@ library.add(faPlayCircle, faPauseCircle);
 
 const numberOfColumns = 10;
 const numberOfRows = 20;
-
-let piece = {
-  type: '',
-  format: []
-};
-
-piece.type = 'gamma';//needs to be random
-switch (piece.type) {
-  case 'straight':
-    piece.format = [];
-    break;
-  case 'gamma':
-    piece.format = [
-      [true, false],
-      [true, false],
-      [true, true],
-    ];
-    break;
-  default:
-    piece.format = [];
-    break;
-}  
-
+const types = ['straightShaped', 'gammaShaped', 'sShaped', 'tShaped'];
+let myTimer;
 //random piece should start falling
 
 //the activePiece should be spawned randomly in the beginning in a random C position (always begins as r:0)
@@ -50,37 +29,131 @@ class App extends Component {
   componentDidMount() {}
 
   startGame = (event) => {
+    //On each start Game button the previous interval is being cleared so a new one will start.
+    clearInterval(myTimer);
+
     const onTimerTick = () => {
       // let myBoard = this.buildingBoard();
 
       //re-renders after this setState!!!
       this.setState({activePiece: {
+        type: this.state.activePiece.type,
+        format: this.state.activePiece.format,
+        formatWithDirection: this.state.activePiece.formatWithDirection,
         r: this.state.activePiece.r + 1,
         c: this.state.activePiece.c
       }})
     }
+
+    let piece = {
+      type: '',
+      format: [],
+      formatWithDirection: []
+    };
+
+    piece.type = _.sample(types);//needs to be random
+    switch (piece.type) {
+      case 'straightShaped':
+        piece.format = [
+          [
+            [true],
+            [true],
+            [true],
+            [true]
+          ],
+          [
+            [true, true, true, true]
+          ]
+        ];
+        piece.formatWithDirection = _.sample(piece.format);
+        break;
+      case 'gammaShaped':
+        piece.format = [
+          [
+            [true, false],
+            [true, false],
+            [true, true],
+          ],
+          [
+            [false, true],
+            [false, true],
+            [true, true],
+          ],
+          [
+            [true, true],
+            [false, true],
+            [false, true],
+          ],
+          [
+            [true, true],
+            [true, false],
+            [true, false],
+          ]     
+        ];
+        piece.formatWithDirection = _.sample(piece.format);
+        break;
+      case 'sShaped':
+        piece.format = [
+          [
+            [false, true],
+            [true, true],
+            [true, false],
+          ],
+          [
+            [true, false],
+            [true, true],
+            [false, true],
+          ]
+        ];
+        piece.formatWithDirection = _.sample(piece.format);
+        break;
+      case 'tShaped':
+        piece.format = [
+          [
+            [true, true, true],
+            [false, true, false]
+          ],
+          [
+            [true, false],
+            [true, true],
+            [true, false]
+          ]
+        ];
+        piece.formatWithDirection = _.sample(piece.format);
+        break;
+      default:
+        piece.format = [];
+        piece.formatWithDirection = [];
+        break;
+    }
     
+    //Need to get random column number based on the width of the piece and not based on numberOfColumns-4.
     this.setState({
       activePiece: {
-        format: 'gamma',
+        type: piece.type,
+        format: piece.format,
+        formatWithDirection: piece.formatWithDirection,
         r: 0,
-        c: 4
+        c: _.random(0, numberOfColumns-4)
       }
     });
-    const myTimer = setInterval(onTimerTick, 500);
+    myTimer = setInterval(onTimerTick, 500);
   }
 
   buildingBoard = () => {
     const board = _.cloneDeep(this.state.tetrisBoard);
-    if (this.state.activePiece && this.state.activePiece.r + piece.format.length < 21) {
-      //for loop here based on pieces height and width to draw all cells at once.
-      for (let positionX = 0; positionX < piece.format[0].length; positionX++) {
-        for (let positionY = 0; positionY < piece.format.length; positionY++){
-          board[this.state.activePiece.r + positionY][this.state.activePiece.c + positionX] = piece.format[positionY][positionX];
-        }
+    let { activePiece } = this.state;
+    if (activePiece) {
+      let { r, c, formatWithDirection } = activePiece;
+      if (r + formatWithDirection.length < 21) {
+        //for loop here based on pieces height and width to draw all cells at once.
+        for (let positionX = 0; positionX < formatWithDirection[0].length; positionX++) {
+          for (let positionY = 0; positionY < formatWithDirection.length; positionY++){
+            board[r + positionY][c + positionX] = formatWithDirection[positionY][positionX];
+          }
+        }      
       }      
     }
-
     return board;
   }
 
