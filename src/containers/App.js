@@ -75,20 +75,36 @@ class App extends Component {
             [true, true],
           ],
           [
-            [false, true],
-            [false, true],
-            [true, true],
-          ],
+            [false, false, true],
+            [true, true, true]
+          ], 
           [
             [true, true],
             [false, true],
             [false, true],
           ],
           [
+            [true, true, true],
+            [true, false, false]
+          ],
+          [
+            [false, true],
+            [false, true],
+            [true, true],
+          ],
+          [
+            [true, true, true],
+            [false, false, true]
+          ],
+          [
             [true, true],
             [true, false],
             [true, false],
-          ]     
+          ],
+          [
+            [true, false, false],
+            [true, true, true]
+          ]        
         ];
         piece.formatWithDirection = _.sample(piece.format);
         break;
@@ -103,7 +119,15 @@ class App extends Component {
             [true, false],
             [true, true],
             [false, true],
-          ]
+          ],
+          [
+            [true, true, false],
+            [false, true, true],
+          ],
+          [
+            [false, true, true],
+            [true, true, false],
+          ],
         ];
         piece.formatWithDirection = _.sample(piece.format);
         break;
@@ -117,7 +141,16 @@ class App extends Component {
             [true, false],
             [true, true],
             [true, false]
-          ]
+          ],
+          [
+            [false, true],
+            [true, true],
+            [false, true]
+          ],
+          [
+            [false, true, false],
+            [true, true, true]
+          ],
         ];
         piece.formatWithDirection = _.sample(piece.format);
         break;
@@ -128,13 +161,14 @@ class App extends Component {
     }
     
     //Need to get random column number based on the width of the piece and not based on numberOfColumns-4.
+    // piece.formatWithDirection[0].length
     this.setState({
       activePiece: {
         type: piece.type,
         format: piece.format,
         formatWithDirection: piece.formatWithDirection,
         r: 0,
-        c: _.random(0, numberOfColumns-4)
+        c: _.random(0, numberOfColumns-piece.formatWithDirection[0].length)
       }
     });
     myTimer = setInterval(onTimerTick, 500);
